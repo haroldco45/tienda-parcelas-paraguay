@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tienda de las Parcelas · Paraguay, Caucasia</title>
+<meta name="description" content="Una sola tienda para lo que producen las parcelas de Paraguay, Caucasia. Modelos del mundo, tienda de pedidos, simulador de reparto y ruta de arranque.">
+<meta name="theme-color" content="#1f3a2b">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde:#1f3a2b; --verde2:#2f5a40; --hoja:#4f8a4b; --lima:#a7c957;
+  --tierra:#b5562b; --tierra2:#d9783f; --maiz:#f2b632; --crema:#f7f1e3; --papel:#fffaf0;
+  --tinta:#1d1d1b; --gris:#5b5a55; --linea:#e4dccb; --sombra:0 10px 30px rgba(31,58,43,.14);
+  --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--crema);color:var(--tinta);line-height:1.55;overflow-x:hidden}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.1}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer}
+body.en .es,body:not(.en) .en{display:none!important}
+
+/* barra */
+.top{position:sticky;top:0;z-index:50;background:rgba(31,58,43,.94);backdrop-filter:blur(8px);color:#fff}
+.top .in{max-width:1150px;margin:auto;display:flex;align-items:center;gap:12px;padding:10px 16px}
+.marca{font-family:Fraunces,serif;font-weight:800;font-size:1.05rem;letter-spacing:.2px;white-space:nowrap}
+.marca small{display:block;font-family:Inter;font-weight:500;font-size:.68rem;opacity:.75;letter-spacing:.6px;text-transform:uppercase}
+.nav{display:flex;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:#fff;text-decoration:none;font-size:.85rem;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap;opacity:.85}
+.nav a:hover,.nav a.on{background:rgba(255,255,255,.14);opacity:1}
+.lang{background:var(--maiz);color:var(--verde);border:0;border-radius:999px;padding:7px 12px;font-weight:700;font-size:.8rem}
+.carrito-btn{background:var(--tierra2);color:#fff;border:0;border-radius:999px;padding:7px 12px;font-weight:700;font-size:.8rem;white-space:nowrap}
+.carrito-btn b{background:#fff;color:var(--tierra);border-radius:999px;padding:0 7px;margin-left:4px}
+
+/* hero */
+.hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--verde)}
+.hero .foto{position:absolute;inset:0;background:url(img/tienda.jpg) center/cover;animation:ken 22s ease-in-out infinite alternate;filter:saturate(1.1)}
+@keyframes ken{from{transform:scale(1.05) translate(0,0)}to{transform:scale(1.22) translate(-3%,-2%)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,38,28,.25) 0%,rgba(20,38,28,.55) 45%,rgba(20,38,28,.96) 100%)}
+.hero .tx{position:relative;z-index:2;max-width:1150px;margin:auto;width:100%;padding:40px 16px 56px}
+.chip{display:inline-block;background:var(--maiz);color:var(--verde);font-weight:700;font-size:.75rem;letter-spacing:.8px;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+.hero h1{font-size:clamp(2.3rem,7vw,4.6rem);margin:16px 0 14px;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--lima)}
+.hero p{font-size:clamp(1rem,2.2vw,1.25rem);max-width:58ch;opacity:.95}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.btn.a{background:var(--maiz);color:var(--verde)}
+.btn.b{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.btn.c{background:var(--verde);color:#fff}
+.btn.d{background:var(--tierra);color:#fff}
+
+/* cinta */
+.cinta{background:var(--tierra);color:#fff;overflow:hidden;white-space:nowrap;padding:12px 0;font-family:Fraunces,serif;font-weight:700;font-size:1.05rem}
+.cinta .mov{display:inline-block;animation:cinta 40s linear infinite}
+.cinta span{margin:0 22px}
+.cinta span:nth-child(odd){color:var(--maiz)}
+@keyframes cinta{to{transform:translateX(-50%)}}
+
+/* secciones */
+section{padding:72px 16px}
+.w{max-width:1150px;margin:auto}
+.kick{color:var(--tierra);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:.78rem}
+.tit{font-size:clamp(1.8rem,4.6vw,3rem);margin:8px 0 14px;color:var(--verde)}
+.lead{font-size:1.08rem;color:var(--gris);max-width:65ch}
+.rev{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.rev.vis{opacity:1;transform:none}
+
+/* cifras */
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:30px}
+.cifra{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);padding:22px;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.cifra::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--hoja)}
+.cifra:nth-child(2)::before{background:var(--tierra2)}
+.cifra:nth-child(3)::before{background:var(--maiz)}
+.cifra:nth-child(4)::before{background:var(--verde2)}
+.cifra .n{font-family:Fraunces,serif;font-weight:800;font-size:2.4rem;color:var(--verde)}
+.cifra .l{color:var(--gris);font-size:.92rem}
+.cifra .f{font-size:.72rem;color:#8a877e;margin-top:8px}
+
+/* como funciona */
+.flujo{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:30px;counter-reset:p}
+.paso{background:var(--verde);color:#fff;border-radius:var(--r);padding:24px;position:relative;overflow:hidden;min-height:190px}
+.paso:nth-child(2){background:var(--verde2)}
+.paso:nth-child(3){background:var(--tierra)}
+.paso:nth-child(4){background:#7a4a1f}
+.paso::before{counter-increment:p;content:counter(p,decimal-leading-zero);font-family:Fraunces,serif;font-weight:800;font-size:3.4rem;opacity:.18;position:absolute;right:14px;top:4px}
+.paso h3{font-size:1.3rem;margin-bottom:8px;color:var(--maiz)}
+.paso p{font-size:.95rem;opacity:.92}
+
+/* modelos */
+.mundo{background:var(--verde);color:#fff}
+.mundo .tit{color:#fff}.mundo .lead{color:#d7e3d6}
+.carr{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:26px 2px 14px;scrollbar-width:thin}
+.mod{scroll-snap-align:start;flex:0 0 min(340px,86%);background:var(--papel);color:var(--tinta);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px;transition:transform .25s}
+.mod:hover{transform:translateY(-4px)}
+.mod .pais{font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tierra)}
+.mod h3{font-size:1.35rem;color:var(--verde)}
+.mod .dato{font-family:Fraunces,serif;font-weight:800;font-size:1.9rem;color:var(--tierra)}
+.mod .dato small{display:block;font-family:Inter;font-size:.8rem;font-weight:500;color:var(--gris)}
+.mod p{font-size:.93rem;color:var(--gris)}
+.mod .copia{margin-top:auto;background:#eef4e8;border-radius:12px;padding:12px;font-size:.88rem;color:var(--verde)}
+.mod .copia b{display:block;font-size:.72rem;letter-spacing:.8px;text-transform:uppercase;color:var(--hoja);margin-bottom:2px}
+.flechas{display:flex;gap:8px;justify-content:flex-end}
+.flechas button{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:8px 16px;font-weight:700}
+
+/* modelo paraguay */
+.canales{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:28px}
+.canal{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);padding:22px;box-shadow:var(--sombra)}
+.canal .tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:#eef4e8;color:var(--hoja);margin-bottom:10px}
+.canal h3{font-size:1.2rem;color:var(--verde);margin-bottom:6px}
+.canal p{font-size:.93rem;color:var(--gris)}
+.franja{margin-top:28px;display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:stretch}
+.franja .img{border-radius:var(--r);background:url(img/tienda.jpg) center/cover;min-height:300px;box-shadow:var(--sombra)}
+.reglas{background:var(--tierra);color:#fff;border-radius:var(--r);padding:26px}
+.reglas h3{color:var(--maiz);font-size:1.4rem;margin-bottom:12px}
+.reglas ol{padding-left:20px;display:grid;gap:9px}
+.reglas li{font-size:.95rem}
+
+/* tienda */
+.tienda{background:var(--papel)}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.filtros button{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:.85rem;color:var(--verde)}
+.filtros button.on{background:var(--verde);color:#fff;border-color:var(--verde)}
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+.prod{background:#fff;border:1px solid var(--linea);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.prod:hover{transform:translateY(-3px);box-shadow:var(--sombra)}
+.prod .cab{height:86px;display:flex;align-items:flex-end;padding:12px;color:#fff;font-family:Fraunces,serif;font-weight:800;font-size:1.15rem;line-height:1.1}
+.prod .cuerpo{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.prod .quien{font-size:.78rem;color:var(--hoja);font-weight:700}
+.prod .uni{font-size:.82rem;color:var(--gris)}
+.prod .pr{font-family:Fraunces,serif;font-weight:800;font-size:1.25rem;color:var(--tierra);margin-top:auto}
+.cant{display:flex;align-items:center;gap:6px}
+.cant button{width:34px;height:34px;border-radius:10px;border:0;background:var(--verde);color:#fff;font-weight:800;font-size:1.1rem}
+.cant span{min-width:24px;text-align:center;font-weight:700}
+.aviso{font-size:.8rem;color:#8a877e;margin-top:14px}
+
+/* carrito */
+.panel{position:fixed;inset:0;z-index:80;display:none}
+.panel.abierto{display:block}
+.panel .fondo{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.panel .caja{position:absolute;right:0;top:0;bottom:0;width:min(440px,100%);background:var(--papel);padding:22px 18px;overflow-y:auto;animation:entra .3s ease}
+@keyframes entra{from{transform:translateX(100%)}}
+.caja h3{color:var(--verde);font-size:1.5rem;margin-bottom:6px}
+.grupo{border:1px solid var(--linea);border-radius:14px;padding:12px;margin:12px 0;background:#fff}
+.grupo h4{font-size:.9rem;color:var(--hoja);margin-bottom:6px}
+.linea{display:flex;justify-content:space-between;font-size:.9rem;padding:3px 0}
+.linea.p{color:var(--gris);font-size:.8rem;border-top:1px dashed var(--linea);margin-top:6px;padding-top:6px}
+.tot{font-family:Fraunces,serif;font-size:1.5rem;font-weight:800;color:var(--verde);display:flex;justify-content:space-between;margin:14px 0}
+.campo{display:grid;gap:4px;margin:10px 0}
+.campo label{font-size:.82rem;font-weight:600;color:var(--gris)}
+.campo input,.campo select,.campo textarea{border:1px solid var(--linea);border-radius:10px;padding:10px;font:inherit;background:#fff;width:100%}
+.cerrar{float:right;background:none;border:0;font-weight:700;color:var(--tierra)}
+
+/* simulador */
+.sim{display:grid;grid-template-columns:1fr 1.15fr;gap:20px;margin-top:28px}
+.sim .ctrl{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);padding:22px;box-shadow:var(--sombra)}
+.rng{margin:14px 0}
+.rng label{display:flex;justify-content:space-between;font-weight:600;font-size:.9rem;color:var(--verde)}
+.rng label b{color:var(--tierra)}
+.rng input[type=range]{width:100%;accent-color:var(--tierra);margin-top:6px}
+.res{background:var(--verde);color:#fff;border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px}
+.res .gran{font-family:Fraunces,serif;font-size:clamp(2rem,6vw,3rem);font-weight:800;color:var(--maiz);line-height:1}
+.res .sub{font-size:.85rem;opacity:.8}
+.barras{display:grid;gap:10px}
+.barra .et{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:4px}
+.barra .t{height:16px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.barra .t i{display:block;height:100%;border-radius:999px;transition:width .6s ease}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini div{background:rgba(255,255,255,.08);border-radius:12px;padding:12px}
+.mini b{display:block;font-family:Fraunces,serif;font-size:1.3rem;color:#fff}
+.mini span{font-size:.78rem;opacity:.8}
+
+/* ruta */
+.ruta{display:grid;gap:12px;margin-top:26px}
+.hito{display:grid;grid-template-columns:auto 1fr;gap:14px;background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);padding:16px 18px;align-items:start;transition:background .3s}
+.hito.hecho{background:#e9f2e1;border-color:#c8dcb6}
+.hito input{width:24px;height:24px;accent-color:var(--hoja);margin-top:4px}
+.hito h3{font-size:1.1rem;color:var(--verde)}
+.hito .cuando{font-size:.75rem;font-weight:700;color:var(--tierra);letter-spacing:.6px;text-transform:uppercase}
+.hito p{font-size:.92rem;color:var(--gris)}
+.prog{height:12px;background:var(--linea);border-radius:999px;overflow:hidden;margin-top:18px}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--hoja),var(--lima));width:0;transition:width .5s}
+
+/* limites */
+.limites{background:#2b2a26;color:#f3eee2}
+.limites .tit{color:#fff}.limites .lead{color:#cfc9bb}
+.lims{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:26px}
+.lim{border:1px solid rgba(255,255,255,.15);border-radius:var(--r);padding:20px}
+.lim h3{color:var(--maiz);font-size:1.1rem;margin-bottom:6px}
+.lim p{font-size:.92rem;color:#d8d2c4}
+
+footer{background:var(--verde);color:#d7e3d6;padding:34px 16px;font-size:.85rem}
+footer .w{display:grid;gap:10px}
+footer a{color:var(--maiz)}
+footer .fuentes{font-size:.78rem;opacity:.8}
+
+@media (max-width:820px){
+  .franja,.sim{grid-template-columns:1fr}
+  .hero{min-height:78vh}
+  .marca small{display:none}
+  .prod .cab{height:70px;font-size:1rem}
+  .prod .cuerpo{padding:10px}
+  section{padding:56px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <div class="marca">Tienda de las Parcelas<small>Paraguay · Caucasia</small></div>
+    <nav class="nav" id="nav">
+      <a href="#idea"><span class="es">La idea</span><span class="en">The idea</span></a>
+      <a href="#mundo"><span class="es">El mundo</span><span class="en">The world</span></a>
+      <a href="#modelo"><span class="es">Modelo Paraguay</span><span class="en">Paraguay model</span></a>
+      <a href="#tienda"><span class="es">Tienda</span><span class="en">Shop</span></a>
+      <a href="#cuentas"><span class="es">Cuentas</span><span class="en">Numbers</span></a>
+      <a href="#ruta"><span class="es">Ruta</span><span class="en">Roadmap</span></a>
+    </nav>
+    <button class="carrito-btn" onclick="abrir()"><span class="es">Pedido</span><span class="en">Order</span><b id="nCar">0</b></button>
+    <button class="lang" id="lang" onclick="idioma()">EN</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="foto"></div>
+  <div class="tx">
+    <span class="chip"><span class="es">Idea para el gremio de las parcelas</span><span class="en">An idea for the plot growers' association</span></span>
+    <h1><span class="es">Todo lo de Paraguay, en <em>una sola tienda</em></span><span class="en">All of Paraguay's harvest in <em>one single shop</em></span></h1>
+    <p class="es">Los parceleros de Paraguay, en Caucasia, producen en tierra muy fértil. Hoy cada uno sale a vender solo. Juntos, con una tienda ancla, un catálogo compartido y una regla de reparto clara, pueden vender más, a mejor precio y sin dejar la parcela.</p>
+    <p class="en">The growers of Paraguay, Caucasia, farm very fertile land. Today each one sells alone. Together, with an anchor shop, a shared catalog and a clear revenue-sharing rule, they can sell more, at better prices, without leaving the farm.</p>
+    <div class="cta">
+      <a class="btn a" href="#tienda"><span class="es">Ver la tienda de ejemplo</span><span class="en">See the sample shop</span></a>
+      <a class="btn b" href="#cuentas"><span class="es">Hacer las cuentas</span><span class="en">Run the numbers</span></a>
+    </div>
+  </div>
+</div>
+
+<div class="cinta"><div class="mov" id="cinta"></div></div>
+
+<!-- IDEA -->
+<section id="idea">
+  <div class="w">
+    <div class="kick rev"><span class="es">La idea en simple</span><span class="en">The idea, simply</span></div>
+    <h2 class="tit rev"><span class="es">Uno vende por todos, cada uno produce lo que mejor sabe</span><span class="en">One sells for all, each grows what they do best</span></h2>
+    <p class="lead rev es">En el mundo se le llama <b>farm hub</b> o tienda de productores: un punto de venta (una parcela, la asociación o un local bien ubicado) recibe lo que traen los vecinos, lo vende con su nombre y les paga cada semana. El cliente encuentra todo en un solo lugar y el productor deja de cargar solo con la venta, el reparto y la caja.</p>
+    <p class="lead rev en">Around the world this is called a <b>farm hub</b> or producers' shop: one point of sale (a farm, the association or a well-placed store) receives what the neighbors bring, sells it under their name and pays them every week. Customers find everything in one place, and growers stop carrying sales, delivery and cash alone.</p>
+
+    <div class="flujo">
+      <div class="paso rev"><h3><span class="es">Entregan</span><span class="en">Drop off</span></h3><p class="es">Cada parcela lleva su cosecha al punto de acopio en un día fijo, pesada y marcada con su nombre.</p><p class="en">Each farm brings its harvest to the collection point on a fixed day, weighed and labeled with its name.</p></div>
+      <div class="paso rev"><h3><span class="es">Se exhibe</span><span class="en">Display</span></h3><p class="es">La tienda la muestra en el local y en la app. Un catálogo grande hace que cada cliente compre más.</p><p class="en">The shop shows it in store and in the app. A bigger catalog makes every customer buy more.</p></div>
+      <div class="paso rev"><h3><span class="es">Se vende</span><span class="en">Sell</span></h3><p class="es">Cajero, pedidos por WhatsApp, retiro semanal, ventas a restaurantes y tiendas de Caucasia.</p><p class="en">Cashier, WhatsApp orders, weekly pick-up, sales to restaurants and stores in Caucasia.</p></div>
+      <div class="paso rev"><h3><span class="es">Se liquida</span><span class="en">Settle</span></h3><p class="es">Cada viernes cada parcela cobra su parte según la regla acordada. Todo queda registrado.</p><p class="en">Every Friday each farm gets paid its share under the agreed rule. Everything is recorded.</p></div>
+    </div>
+
+    <div class="cifras">
+      <div class="cifra rev"><div class="n" data-cuenta="80" data-suf=" %">0</div><div class="l es">del precio final para el productor en el mercado de Melo, Uruguay</div><div class="l en">of the final price goes to the grower at the Melo market, Uruguay</div><div class="f">La Mañana, 2020</div></div>
+      <div class="cifra rev"><div class="n" data-cuenta="33" data-suf=" %">0</div><div class="l es">crecieron en EE. UU. las ventas por tiendas y food hubs (2017–2022)</div><div class="l en">growth of US sales through stores and food hubs (2017–2022)</div><div class="f">USDA, Censo 2022</div></div>
+      <div class="cifra rev"><div class="n" data-cuenta="580">0</div><div class="l es">productores rurales venden en Mercados Campesinos de Medellín</div><div class="l en">rural growers sell through Medellín's Farmers' Markets</div><div class="f">Alcaldía de Medellín, 2026</div></div>
+      <div class="cifra rev"><div class="n" data-cuenta="65" data-suf=" %">0</div><div class="l es">de los italianos compró en un mercado de agricultores en 2025</div><div class="l en">of Italians bought at a farmers' market in 2025</div><div class="f">Coldiretti</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MUNDO -->
+<section id="mundo" class="mundo">
+  <div class="w">
+    <div class="kick rev" style="color:var(--maiz)"><span class="es">Modelos que ya funcionan</span><span class="en">Models already working</span></div>
+    <h2 class="tit rev"><span class="es">Lo que hacen en el mundo, y qué copiar en Paraguay</span><span class="en">What the world does, and what Paraguay can copy</span></h2>
+    <p class="lead rev es">Deslice para ver cada caso. En cada tarjeta va lo que se puede traer tal cual a las parcelas.</p>
+    <p class="lead rev en">Swipe through each case. Every card shows what can be brought straight to the plots.</p>
+    <div class="carr" id="carr"></div>
+    <div class="flechas"><button onclick="mover(-1)">&lsaquo;</button><button onclick="mover(1)">&rsaquo;</button></div>
+  </div>
+</section>
+
+<!-- MODELO PARAGUAY -->
+<section id="modelo">
+  <div class="w">
+    <div class="kick rev"><span class="es">Propuesta</span><span class="en">Proposal</span></div>
+    <h2 class="tit rev"><span class="es">El modelo para las parcelas de Paraguay</span><span class="en">The model for the Paraguay plots</span></h2>
+    <p class="lead rev es">Las parcelas (de un cuarterón a una hectárea) ya tienen lo más difícil: asociación, tierra buena y cercanía al casco urbano de Caucasia. Falta juntar la venta. La asociación hace de ancla y la tienda vende por cinco canales.</p>
+    <p class="lead rev en">The plots (from a quarter to one hectare) already have the hardest part: an association, good soil and closeness to Caucasia's town center. What's missing is selling together. The association acts as anchor and the shop sells through five channels.</p>
+
+    <div class="canales">
+      <div class="canal rev"><span class="tag">1</span><h3><span class="es">Tienda en la vereda</span><span class="en">Shop on the road</span></h3><p class="es">Un local en la entrada de Paraguay con cajero, báscula y nevera. Como los puestos de carretera de Japón: fresco de la mañana, con el nombre del productor en cada producto.</p><p class="en">A store at the entrance of Paraguay with cashier, scale and fridge. Like Japan's roadside stations: picked that morning, with the grower's name on every item.</p></div>
+      <div class="canal rev"><span class="tag">2</span><h3><span class="es">Pedido y retiro semanal</span><span class="en">Weekly order and pick-up</span></h3><p class="es">El cliente pide en la app hasta el jueves y recoge el sábado en un punto de Caucasia. Así se cosecha solo lo vendido, como en La Ruche qui dit Oui.</p><p class="en">Customers order in the app until Thursday and pick up on Saturday at a point in Caucasia. Only what's sold gets harvested, like La Ruche qui dit Oui.</p></div>
+      <div class="canal rev"><span class="tag">3</span><h3><span class="es">Restaurantes y tiendas</span><span class="en">Restaurants and stores</span></h3><p class="es">Pedidos fijos semanales a restaurantes, asaderos y tiendas de barrio. Es el canal que más crece en EE. UU.: venta por intermediarios cercanos.</p><p class="en">Fixed weekly orders to restaurants, grills and corner stores. It's the fastest-growing channel in the US: sales through nearby intermediaries.</p></div>
+      <div class="canal rev"><span class="tag">4</span><h3><span class="es">Canasta por suscripción</span><span class="en">Subscription basket</span></h3><p class="es">Una canasta familiar fija cada semana o quincena. Da ingreso seguro y deja planear las siembras, como la canasta de Oregón con 300 socios.</p><p class="en">A fixed family basket every week or two. It gives steady income and lets growers plan planting, like the Oregon basket with 300 members.</p></div>
+      <div class="canal rev"><span class="tag">5</span><h3><span class="es">Recorrido agrícola</span><span class="en">Farm tour</span></h3><p class="es">Senderos por las parcelas para visitantes de Caucasia y la región, que terminan en la tienda. Une el campo con la propuesta turística del río Cauca.</p><p class="en">Trails through the plots for visitors from Caucasia and the region, ending at the shop. It links the farms with the Cauca River tourism proposal.</p></div>
+    </div>
+
+    <div class="franja">
+      <div class="img rev" role="img" aria-label="Tienda de productores locales"></div>
+      <div class="reglas rev">
+        <h3><span class="es">Reglas claras desde el día uno</span><span class="en">Clear rules from day one</span></h3>
+        <ol class="es">
+          <li>Regla de reparto escrita y firmada (por ejemplo 80 % productor, 20 % tienda).</li>
+          <li>Día fijo de entrega y día fijo de pago.</li>
+          <li>Cada productor pone su precio dentro de un rango acordado.</li>
+          <li>Calidad mínima: lo que no cumple se devuelve o se vende como segunda.</li>
+          <li>Lo que no se vende en la semana tiene destino acordado (devolución, procesado o donación).</li>
+          <li>Cuentas abiertas: cada parcela ve sus ventas en la app.</li>
+        </ol>
+        <ol class="en">
+          <li>Written, signed sharing rule (e.g. 80% grower, 20% shop).</li>
+          <li>Fixed drop-off day and fixed pay day.</li>
+          <li>Each grower sets prices within an agreed range.</li>
+          <li>Minimum quality: what fails is returned or sold as second grade.</li>
+          <li>Unsold produce has an agreed fate (return, processing or donation).</li>
+          <li>Open books: each farm sees its sales in the app.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIENDA -->
+<section id="tienda" class="tienda">
+  <div class="w">
+    <div class="kick rev"><span class="es">Así se vería la tienda</span><span class="en">What the shop would look like</span></div>
+    <h2 class="tit rev"><span class="es">Un pedido, varias parcelas</span><span class="en">One order, many farms</span></h2>
+    <p class="lead rev es">El cliente arma un solo pedido. La app lo separa por parcela y calcula cuánto le toca a cada una. Pruébelo.</p>
+    <p class="lead rev en">The customer builds one order. The app splits it by farm and works out each farm's share. Try it.</p>
+    <div class="filtros" id="filtros"></div>
+    <div class="prods" id="prods"></div>
+    <p class="aviso es">Parcelas, productos y precios de ejemplo para la demostración. Se reemplazan por los reales cuando la asociación entregue su lista.</p>
+    <p class="aviso en">Sample farms, products and prices for the demo. They get replaced with the real ones once the association hands over its list.</p>
+  </div>
+</section>
+
+<!-- CUENTAS -->
+<section id="cuentas">
+  <div class="w">
+    <div class="kick rev"><span class="es">Simulador</span><span class="en">Simulator</span></div>
+    <h2 class="tit rev"><span class="es">¿Cuánto le queda a cada parcela?</span><span class="en">How much does each farm keep?</span></h2>
+    <p class="lead rev es">Mueva los valores y compare las reglas de reparto que usan en el mundo contra vender al intermediario.</p>
+    <p class="lead rev en">Move the values and compare the world's sharing rules against selling to a middleman.</p>
+    <div class="sim">
+      <div class="ctrl rev">
+        <div class="rng"><label><span><span class="es">Parcelas en la tienda</span><span class="en">Farms in the shop</span></span><b id="vP">30</b></label><input type="range" id="iP" min="5" max="150" step="1" value="30"></div>
+        <div class="rng"><label><span><span class="es">Venta semanal por parcela (precio al cliente)</span><span class="en">Weekly sales per farm (customer price)</span></span><b id="vV">$300.000</b></label><input type="range" id="iV" min="50000" max="2000000" step="10000" value="300000"></div>
+        <div class="rng"><label><span><span class="es">Lo que paga el intermediario (% del precio final)</span><span class="en">What the middleman pays (% of final price)</span></span><b id="vI">45 %</b></label><input type="range" id="iI" min="20" max="80" step="1" value="45"></div>
+        <div class="campo"><label><span class="es">Regla de reparto</span><span class="en">Sharing rule</span></label>
+          <select id="iR">
+            <option value="melo">Melo, Uruguay — 80 % / 20 %</option>
+            <option value="ruche">La Ruche, Francia — 83,3 % / 16,7 %</option>
+            <option value="navore">Navore, California — 100 % + 6,5 %</option>
+            <option value="propia">Propia / Custom</option>
+          </select>
+        </div>
+        <div class="rng" id="bxPropia" style="display:none"><label><span><span class="es">Parte del productor</span><span class="en">Grower share</span></span><b id="vC">85 %</b></label><input type="range" id="iC" min="60" max="95" step="1" value="85"></div>
+        <div class="rng" id="bxCuota" style="display:none"><label><span><span class="es">Cuota mensual por parcela</span><span class="en">Monthly fee per farm</span></span><b id="vQ">$50.000</b></label><input type="range" id="iQ" min="0" max="200000" step="5000" value="50000"></div>
+        <p class="aviso es">El % del intermediario es un supuesto: ajústelo con lo que hoy les pagan en Paraguay.</p>
+        <p class="aviso en">The middleman % is an assumption: adjust it to what Paraguay growers are paid today.</p>
+      </div>
+      <div class="res rev">
+        <div><div class="sub es">Ingreso mensual por parcela vendiendo en la tienda</div><div class="sub en">Monthly income per farm selling through the shop</div><div class="gran" id="oG">$0</div></div>
+        <div class="barras">
+          <div class="barra"><div class="et"><span class="es">Tienda de las Parcelas</span><span class="en">Plots Shop</span><b id="oT"></b></div><div class="t"><i id="bT" style="background:var(--lima)"></i></div></div>
+          <div class="barra"><div class="et"><span class="es">Vendiendo al intermediario</span><span class="en">Selling to the middleman</span><b id="oM"></b></div><div class="t"><i id="bM" style="background:var(--tierra2)"></i></div></div>
+        </div>
+        <div class="mini">
+          <div><b id="oD">$0</b><span class="es">más al mes por parcela</span><span class="en">more per month per farm</span></div>
+          <div><b id="oF">$0</b><span class="es">fondo mensual para operar la tienda</span><span class="en">monthly fund to run the shop</span></div>
+          <div><b id="oS">$0</b><span class="es">ventas mensuales de la tienda</span><span class="en">monthly shop sales</span></div>
+          <div><b id="oE">0</b><span class="es">sueldos posibles con el fondo (a 1 SMMLV)</span><span class="en">wages the fund could cover (at 1 minimum wage)</span></div>
+        </div>
+        <div class="sub" id="oNota"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RUTA -->
+<section id="ruta" class="tienda">
+  <div class="w">
+    <div class="kick rev"><span class="es">Ruta de arranque</span><span class="en">Launch roadmap</span></div>
+    <h2 class="tit rev"><span class="es">De la idea a la primera venta en 12 semanas</span><span class="en">From idea to first sale in 12 weeks</span></h2>
+    <p class="lead rev es">Marque cada paso a medida que el gremio avance. Queda guardado en este teléfono.</p>
+    <p class="lead rev en">Tick each step as the association moves forward. It's saved on this phone.</p>
+    <div class="prog"><i id="prog"></i></div>
+    <div class="ruta" id="listaRuta"></div>
+  </div>
+</section>
+
+<!-- LIMITES -->
+<section class="limites">
+  <div class="w">
+    <div class="kick rev" style="color:var(--maiz)"><span class="es">Con los pies en la tierra</span><span class="en">Feet on the ground</span></div>
+    <h2 class="tit rev"><span class="es">Lo que puede salir mal y cómo evitarlo</span><span class="en">What can go wrong and how to avoid it</span></h2>
+    <p class="lead rev es">El modelo no es una receta segura. Los mismos casos del mundo dejan lecciones.</p>
+    <p class="lead rev en">The model isn't a sure thing. The same world cases leave lessons.</p>
+    <div class="lims" id="lims"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="w">
+    <div><b>Tienda de las Parcelas · Paraguay, Caucasia</b> — <span class="es">una idea de</span><span class="en">an idea by</span> <b>Vibras Positivas HM</b> · <a href="https://wa.me/573117700431">311 770 0431</a></div>
+    <div class="fuentes es">Fuentes: Diario Agrícola (José Rios); Local Line; Servicio de Investigación Económica del USDA (Censo Agropecuario 2022); Coldiretti; Universidad Harper Adams; Times of San Diego; La Mañana; Indap; La Ruche qui dit Oui; Alcaldía de Medellín; Alcaldía de Bogotá.</div>
+    <div class="fuentes en">Sources: Diario Agrícola (José Rios); Local Line; USDA Economic Research Service (2022 Census of Agriculture); Coldiretti; Harper Adams University; Times of San Diego; La Mañana; Indap; La Ruche qui dit Oui; City of Medellín; City of Bogotá.</div>
+    <div class="fuentes" id="hora"></div>
+  </div>
+</footer>
+
+<!-- PANEL DEL PEDIDO -->
+<div class="panel" id="panel">
+  <div class="fondo" onclick="cerrar()"></div>
+  <div class="caja">
+    <button class="cerrar" onclick="cerrar()"><span class="es">Cerrar</span><span class="en">Close</span></button>
+    <h3><span class="es">Su pedido</span><span class="en">Your order</span></h3>
+    <p class="aviso es">Separado por parcela, con lo que recibe cada una.</p>
+    <p class="aviso en">Split by farm, with what each one receives.</p>
+    <div id="lista"></div>
+    <div class="tot"><span>Total</span><span id="total">$0</span></div>
+    <div class="campo"><label><span class="es">Nombre</span><span class="en">Name</span></label><input id="cNom" autocomplete="name"></div>
+    <div class="campo"><label><span class="es">Barrio o dirección</span><span class="en">Neighborhood or address</span></label><input id="cDir" autocomplete="street-address"></div>
+    <div class="campo"><label><span class="es">Cómo lo recibe</span><span class="en">How you receive it</span></label>
+      <select id="cEnt">
+        <option value="r"></option><option value="t"></option><option value="d"></option>
+      </select>
+    </div>
+    <button class="btn d" style="width:100%;justify-content:center" onclick="enviar()"><span class="es">Enviar pedido por WhatsApp</span><span class="en">Send order via WhatsApp</span></button>
+  </div>
+</div>
+
+<script>
+const CONFIG = {
+  whatsapp: '573117700431',      // cambiar por el número de la asociación
+  smmlv: 1750905                 // SMMLV 2026 (Decreto 1469 de 2025, vigente)
+};
+
+/* ---------- idioma ---------- */
+let EN = false;
+try{ EN = localStorage.getItem('tp-lang')==='en'; }catch(e){}
+function T(es,en){ return EN?en:es; }
+function idioma(){ EN=!EN; try{localStorage.setItem('tp-lang',EN?'en':'es')}catch(e){} pintarIdioma(); }
+function pintarIdioma(){
+  document.body.classList.toggle('en',EN);
+  document.documentElement.lang = EN?'en':'es';
+  document.getElementById('lang').textContent = EN?'ES':'EN';
+  cinta(); modelos(); filtros(); productos(); ruta(); limites(); calc(); carrito(); entregas();
+}
+const pesos = n => '$' + Math.round(n).toLocaleString('es-CO');
+
+/* ---------- cinta ---------- */
+function cinta(){
+  const p = EN
+    ? ['Plantain','Cassava','Yam','Corn','Pumpkin','Free-range eggs','Coastal cheese','Suero','Cacao','Honey','Chili peppers','Papaya','Watermelon','Lemons']
+    : ['Plátano','Yuca','Ñame','Maíz','Ahuyama','Huevo criollo','Queso costeño','Suero','Cacao','Miel','Ají','Papaya','Patilla','Limón'];
+  const h = p.map(x=>`<span>${x}</span>`).join('');
+  document.getElementById('cinta').innerHTML = h+h;
+}
+
+/* ---------- modelos del mundo ---------- */
+const MODELOS = [
+  {pais:['Uruguay','Uruguay'],nom:['Mercado Agrícola Familiar de Melo','Melo Family Farm Market'],
+   dato:['80 %','80%'],datoS:['del precio final para el productor','of the final price to the grower'],
+   txt:['Unos 60 productores entregan los lunes en un antiguo galpón y no tienen que estar en el puesto: hay cajeros, reponedores y un administrador. Cobran los viernes. Costó unos US$ 45.000 con fondos públicos (reporte de 2020).','About 60 growers drop off on Mondays at a former seed shed and don\'t need to staff the stall: there are cashiers, stockers and a manager. They get paid on Fridays. It cost about US$45,000 in public funds (2020 report).'],
+   copia:['Entrega el lunes, pago el viernes, 80/20 y personal propio de la tienda.','Monday drop-off, Friday pay, 80/20 and the shop\'s own staff.']},
+  {pais:['Francia y Europa','France and Europe'],nom:['La Ruche qui dit Oui','La Ruche qui dit Oui (Food Assembly)'],
+   dato:['~16,7 %','~16.7%'],datoS:['de comisión total, el resto es del productor','total commission, the rest goes to the grower'],
+   txt:['Un anfitrión del barrio abre una "colmena" en un café o escuela. Los productores ponen su precio y su pedido mínimo, los clientes piden por internet y recogen en un encuentro semanal. La comisión se reparte entre el anfitrión y la plataforma.','A neighborhood host opens a "hive" in a café or school. Growers set their price and minimum order, customers order online and pick up at a weekly meet-up. The commission is split between the host and the platform.'],
+   copia:['Pedido previo por la app: se cosecha solo lo que ya está vendido.','Pre-orders in the app: only what\'s already sold gets harvested.']},
+  {pais:['Japón','Japan'],nom:['Michi-no-eki y chokubaijo','Michi-no-eki and chokubaijo'],
+   dato:['Desde 1970','Since 1970'],datoS:['puestos de venta directa en la carretera','direct-sale stands on the road'],
+   txt:['Las estaciones de carretera y los puestos de venta directa reciben lo que los campesinos cosechan en la mañana. Cada productor pone su nombre y su precio. Muchos los organiza la cooperativa agrícola (JA) y venden también comida preparada por mujeres campesinas.','Roadside stations and direct-sale stands take what farmers harvest that morning. Each grower labels it with their name and price. Many are run by the farm cooperative (JA) and also sell food prepared by farm women.'],
+   copia:['Tienda en la vía con el nombre de cada parcela y comida típica hecha en la vereda.','Roadside shop with each farm\'s name and typical food made in the village.']},
+  {pais:['Italia','Italy'],nom:['Campagna Amica (Coldiretti)','Campagna Amica (Coldiretti)'],
+   dato:['+1.000','1,000+'],datoS:['mercados semanales y 72 cubiertos','weekly markets and 72 covered ones'],
+   txt:['El gremio agrícola más grande de Italia arma una red nacional de mercados de agricultores con una marca común. El 65 % de los italianos compró al menos una vez en 2025 en un mercado de agricultores.','Italy\'s largest farm union runs a national network of farmers\' markets under one brand. 65% of Italians bought at a farmers\' market at least once in 2025.'],
+   copia:['El gremio como marca: "Producto de las Parcelas de Paraguay".','The union as a brand: "Product of the Paraguay Plots".']},
+  {pais:['California, EE. UU.','California, USA'],nom:['Navore Market','Navore Market'],
+   dato:['+6,5 %','+6.5%'],datoS:['de recargo al cliente; el productor cobra el 100 %','customer surcharge; the grower keeps 100%'],
+   txt:['Punto de retiro semanal en San Diego con 11 productores. El productor paga una suscripción mensual y el cliente un recargo, para que el productor se quede con todo su precio. Arrancó con fondo del USDA y pocos clientes: buena idea, pero lenta al comienzo.','Weekly pick-up point in San Diego with 11 producers. Growers pay a monthly subscription and customers a surcharge, so growers keep their full price. It started with USDA funding and few customers: good idea, slow start.'],
+   copia:['Opción de cuota fija mensual en vez de porcentaje.','Option of a fixed monthly fee instead of a percentage.']},
+  {pais:['Reino Unido','United Kingdom'],nom:['Farm shops','Farm shops'],
+   dato:['£1.400 M','£1.4 bn'],datoS:['al año en 1.581 tiendas de campo','a year across 1,581 farm shops'],
+   txt:['Las tiendas de campo británicas (como la de la foto) suman unos 25.000 empleos. Venden lo propio y lo de vecinos, y muchas tienen café, panadería y área para niños.','British farm shops (like the one pictured) add up to about 25,000 jobs. They sell their own and neighbors\' produce, and many have a café, bakery and a kids\' area.'],
+   copia:['Tienda con café y desayuno campesino: la gente llega y se queda.','Shop with a café and farm breakfast: people come and stay.']},
+  {pais:['Chile','Chile'],nom:['Indap','Indap'],
+   dato:['200','200'],datoS:['espacios de venta, más de 2.600 productores','sales spaces, 2,600+ growers'],
+   txt:['El instituto agrario de Chile combina mercados campesinos, ferias nacionales, convenios con mayoristas y tiendas especializadas para la agricultura familiar.','Chile\'s farm institute combines farmers\' markets, national fairs, wholesale agreements and specialty shops for family farming.'],
+   copia:['Varios canales a la vez, no depender de uno solo.','Several channels at once, not depending on just one.']},
+  {pais:['Medellín, Colombia','Medellín, Colombia'],nom:['Mercados Campesinos de Medellín','Medellín Farmers\' Markets'],
+   dato:['$28.600 M','COP 28.6 bn'],datoS:['vendidos de 2024 a julio de 2026','sold from 2024 to July 2026'],
+   txt:['38 años de trayectoria. 580 productores de los corregimientos venden en 16 tiendas móviles y 20 parques, y la vitrina de La Alpujarra pasó de mensual a quincenal.','38 years running. 580 growers from rural districts sell through 16 mobile shops and 20 parks, and the La Alpujarra showcase went from monthly to every two weeks.'],
+   copia:['Tienda móvil que lleve las parcelas a los barrios de Caucasia.','A mobile shop that takes the plots to Caucasia\'s neighborhoods.']},
+  {pais:['Bogotá, Colombia','Bogotá, Colombia'],nom:['Mercados Campesinos de Bogotá','Bogotá Farmers\' Markets'],
+   dato:['$24.900 M','COP 24.9 bn'],datoS:['vendidos de 2024 a abril de 2026','sold from 2024 to April 2026'],
+   txt:['Más de 200 mercados campesinos en 2026 y una meta de miles de espacios de venta directa, combinando puestos físicos con plataformas digitales.','Over 200 farmers\' markets in 2026 and a target of thousands of direct-sale spaces, combining physical stalls with digital platforms.'],
+   copia:['Presencial y digital juntos: la tienda y la app.','In-person and digital together: the shop and the app.']}
+];
+function modelos(){
+  const i = EN?1:0;
+  document.getElementById('carr').innerHTML = MODELOS.map(m=>`
+    <article class="mod">
+      <div class="pais">${m.pais[i]}</div>
+      <h3>${m.nom[i]}</h3>
+      <div class="dato">${m.dato[i]}<small>${m.datoS[i]}</small></div>
+      <p>${m.txt[i]}</p>
+      <div class="copia"><b>${T('Para copiar en Paraguay','To copy in Paraguay')}</b>${m.copia[i]}</div>
+    </article>`).join('');
+}
+function mover(d){ const c=document.getElementById('carr'); c.scrollBy({left:d*c.clientWidth*.85,behavior:'smooth'}); }
+
+/* ---------- tienda ---------- */
+const PARCELAS = [
+  {id:'esp',n:'Parcela La Esperanza',c:'#2f5a40'},
+  {id:'pro',n:'Parcela El Progreso',c:'#b5562b'},
+  {id:'cei',n:'Parcela La Ceiba',c:'#7a4a1f'},
+  {id:'sj', n:'Parcela San José',c:'#4f8a4b'},
+  {id:'man',n:'Parcela Los Mangos',c:'#c98a16'},
+  {id:'ede',n:'Parcela El Edén',c:'#1f3a2b'}
+];
+const CATS = [
+  {id:'tod',es:'Todo',en:'All'},
+  {id:'vit',es:'Plátano y raíces',en:'Plantain & roots'},
+  {id:'hor',es:'Hortalizas y frutas',en:'Vegetables & fruit'},
+  {id:'lac',es:'Lácteos y huevos',en:'Dairy & eggs'},
+  {id:'otr',es:'Despensa',en:'Pantry'}
+];
+const PRODS = [
+  {id:1,p:'esp',cat:'vit',es:'Plátano hartón',en:'Hartón plantain',ues:'Mano de 10',uen:'Hand of 10',pr:9000},
+  {id:2,p:'pro',cat:'vit',es:'Yuca',en:'Cassava',ues:'Bolsa de 5 lb',uen:'5 lb bag',pr:7000},
+  {id:3,p:'cei',cat:'vit',es:'Ñame espino',en:'Yam',ues:'Bolsa de 5 lb',uen:'5 lb bag',pr:10000},
+  {id:4,p:'sj', cat:'hor',es:'Ahuyama',en:'Pumpkin',ues:'Unidad mediana',uen:'Medium piece',pr:6000},
+  {id:5,p:'man',cat:'hor',es:'Patilla',en:'Watermelon',ues:'Unidad',uen:'Each',pr:12000},
+  {id:6,p:'esp',cat:'hor',es:'Ají dulce',en:'Sweet chili',ues:'Libra',uen:'Pound',pr:5000},
+  {id:7,p:'man',cat:'hor',es:'Papaya',en:'Papaya',ues:'Unidad',uen:'Each',pr:7000},
+  {id:8,p:'sj', cat:'hor',es:'Limón',en:'Lemons',ues:'Bolsa de 20',uen:'Bag of 20',pr:5000},
+  {id:9,p:'ede',cat:'lac',es:'Queso costeño',en:'Coastal cheese',ues:'Libra',uen:'Pound',pr:14000},
+  {id:10,p:'ede',cat:'lac',es:'Suero costeño',en:'Suero (sour cream)',ues:'Frasco 500 g',uen:'500 g jar',pr:9000},
+  {id:11,p:'pro',cat:'lac',es:'Huevo criollo',en:'Free-range eggs',ues:'Panal de 30',uen:'Tray of 30',pr:24000},
+  {id:12,p:'cei',cat:'otr',es:'Maíz para arepa',en:'Corn for arepas',ues:'Bolsa de 5 lb',uen:'5 lb bag',pr:8000},
+  {id:13,p:'sj', cat:'otr',es:'Cacao en grano',en:'Cacao beans',ues:'Libra',uen:'Pound',pr:15000},
+  {id:14,p:'man',cat:'otr',es:'Miel de abejas',en:'Bee honey',ues:'Frasco 500 g',uen:'500 g jar',pr:22000},
+  {id:15,p:'esp',cat:'otr',es:'Bollo limpio',en:'Corn bollo',ues:'Paquete de 6',uen:'Pack of 6',pr:9000},
+  {id:16,p:'cei',cat:'otr',es:'Gallina criolla',en:'Free-range hen',ues:'Unidad limpia',uen:'Cleaned, each',pr:45000}
+];
+let cat='tod', car={};
+try{ car = JSON.parse(localStorage.getItem('tp-car')||'{}'); }catch(e){ car={}; }
+const parc = id => PARCELAS.find(x=>x.id===id);
+function filtros(){
+  document.getElementById('filtros').innerHTML = CATS.map(c=>`<button class="${c.id===cat?'on':''}" onclick="cat='${c.id}';filtros();productos()">${EN?c.en:c.es}</button>`).join('');
+}
+function productos(){
+  const l = PRODS.filter(x=>cat==='tod'||x.cat===cat);
+  document.getElementById('prods').innerHTML = l.map(x=>{
+    const pa=parc(x.p), q=car[x.id]||0;
+    return `<div class="prod">
+      <div class="cab" style="background:linear-gradient(135deg,${pa.c},${pa.c}cc 60%,#f2b63299)">${EN?x.en:x.es}</div>
+      <div class="cuerpo">
+        <div class="quien">${pa.n}</div>
+        <div class="uni">${EN?x.uen:x.ues}</div>
+        <div class="pr">${pesos(x.pr)}</div>
+        <div class="cant"><button onclick="sumar(${x.id},-1)" aria-label="-">&minus;</button><span>${q}</span><button onclick="sumar(${x.id},1)" aria-label="+">+</button></div>
+      </div></div>`;
+  }).join('');
+}
+function sumar(id,d){
+  car[id]=Math.max(0,(car[id]||0)+d); if(!car[id]) delete car[id];
+  try{localStorage.setItem('tp-car',JSON.stringify(car))}catch(e){}
+  productos(); carrito();
+}
+function reglaActual(){ return document.getElementById('iR').value; }
+function parteProductor(){
+  const r=reglaActual();
+  if(r==='melo') return .8; if(r==='ruche') return 1-.167; if(r==='navore') return 1;
+  return +document.getElementById('iC').value/100;
+}
+function carrito(){
+  const ids=Object.keys(car); let n=0,tot=0,html='';
+  const pp = parteProductor(), rec = reglaActual()==='navore'?0.065:0;
+  PARCELAS.forEach(pa=>{
+    const items = ids.map(i=>PRODS.find(x=>x.id==i)).filter(x=>x&&x.p===pa.id);
+    if(!items.length) return;
+    let sub=0;
+    html += `<div class="grupo"><h4>${pa.n}</h4>` + items.map(x=>{ const q=car[x.id]; sub+=q*x.pr; n+=q; return `<div class="linea"><span>${q} × ${EN?x.en:x.es}</span><span>${pesos(q*x.pr)}</span></div>`; }).join('')
+      + `<div class="linea p"><span>${T('Recibe la parcela','Farm receives')}</span><span>${pesos(sub*pp)}</span></div></div>`;
+    tot+=sub;
+  });
+  if(!html) html = `<p class="aviso">${T('Aún no hay productos en el pedido.','No products in the order yet.')}</p>`;
+  if(rec) html += `<div class="linea p"><span>${T('Recargo de la tienda (6,5 %)','Shop surcharge (6.5%)')}</span><span>${pesos(tot*rec)}</span></div>`;
+  document.getElementById('lista').innerHTML = html;
+  document.getElementById('total').textContent = pesos(tot*(1+rec));
+  document.getElementById('nCar').textContent = n;
+}
+function entregas(){
+  const s=document.getElementById('cEnt'), v=s.value;
+  s.options[0].text=T('Retiro el sábado en el punto de Caucasia','Saturday pick-up at the Caucasia point');
+  s.options[1].text=T('Paso por la tienda en Paraguay','I\'ll stop by the shop in Paraguay');
+  s.options[2].text=T('Domicilio (se acuerda el costo)','Home delivery (cost agreed)');
+  s.value=v;
+}
+function abrir(){ carrito(); document.getElementById('panel').classList.add('abierto'); }
+function cerrar(){ document.getElementById('panel').classList.remove('abierto'); }
+function enviar(){
+  const ids=Object.keys(car); if(!ids.length){ alert(T('Agregue productos primero.','Add products first.')); return; }
+  const rec = reglaActual()==='navore'?0.065:0; let tot=0;
+  let m = 'Pedido Tienda de las Parcelas - Paraguay\n';
+  PARCELAS.forEach(pa=>{
+    const items = ids.map(i=>PRODS.find(x=>x.id==i)).filter(x=>x&&x.p===pa.id);
+    if(!items.length) return;
+    m += `\n${pa.n}\n`;
+    items.forEach(x=>{ const q=car[x.id]; tot+=q*x.pr; m+=`- ${q} x ${x.es} (${x.ues}): ${pesos(q*x.pr)}\n`; });
+  });
+  if(rec) m += `\nRecargo 6,5 %: ${pesos(tot*rec)}`;
+  m += `\nTotal: ${pesos(tot*(1+rec))}\n\nNombre: ${document.getElementById('cNom').value}\nDirección: ${document.getElementById('cDir').value}\nEntrega: ${document.getElementById('cEnt').selectedOptions[0].text}\nHora del pedido: ${horaCol()}`;
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(m)}`,'_blank');
+}
+
+/* ---------- simulador ---------- */
+const S = 52/12; // semanas por mes
+function calc(){
+  const P=+iP.value, V=+iV.value, I=+iI.value/100, r=reglaActual();
+  bxPropia.style.display = r==='propia'?'block':'none';
+  bxCuota.style.display = r==='navore'?'block':'none';
+  vP.textContent=P; vV.textContent=pesos(V); vI.textContent=I*100+' %'; vC.textContent=iC.value+' %'; vQ.textContent=pesos(+iQ.value);
+  const ventaMes = V*S;
+  let tienda, fondo;
+  if(r==='navore'){ const q=+iQ.value; tienda = ventaMes - q; fondo = P*(ventaMes*0.065 + q); }
+  else { const pp=parteProductor(); tienda = ventaMes*pp; fondo = P*ventaMes*(1-pp); }
+  const inter = ventaMes*I, dif = tienda-inter;
+  const max = Math.max(tienda,inter,1);
+  oG.textContent=pesos(tienda); oT.textContent=pesos(tienda); oM.textContent=pesos(inter);
+  bT.style.width=(tienda/max*100)+'%'; bM.style.width=(inter/max*100)+'%';
+  oD.textContent=(dif>=0?'+':'')+pesos(dif); oF.textContent=pesos(fondo);
+  oS.textContent=pesos(P*ventaMes*(r==='navore'?1.065:1));
+  oE.textContent=Math.floor(fondo/(CONFIG.smmlv*1.52));
+  oNota.textContent = T(
+    `Supone que la tienda vende al mismo precio al que hoy compra el cliente final. Los sueldos se calculan con un costo laboral aproximado de 1,52 veces el salario mínimo.`,
+    `Assumes the shop sells at the price end customers pay today. Wages use an approximate labor cost of 1.52 times the minimum wage.`);
+  carrito();
+}
+['iP','iV','iI','iR','iC','iQ'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
+
+/* ---------- ruta ---------- */
+const RUTA = [
+  {s:['Semana 1','Week 1'],t:['Reunión del gremio','Association meeting'],d:['Presentar la idea a la asociación y medir cuántas parcelas quieren entrar.','Pitch the idea to the association and count how many farms want in.']},
+  {s:['Semana 2','Week 2'],t:['Inventario de lo que hay','Inventory of what exists'],d:['Cada parcela dice qué produce, cuánto y en qué meses. Se carga en la app.','Each farm lists what it grows, how much and in which months. It goes into the app.']},
+  {s:['Semana 3','Week 3'],t:['Elegir el ancla','Pick the anchor'],d:['Decidir quién opera: la asociación, una parcela bien ubicada o un local en Caucasia.','Decide who operates: the association, a well-placed farm or a store in Caucasia.']},
+  {s:['Semana 4','Week 4'],t:['Firmar las reglas','Sign the rules'],d:['Reparto, día de entrega, día de pago, calidad mínima y qué pasa con lo no vendido.','Sharing rule, drop-off day, pay day, minimum quality and what happens to unsold produce.']},
+  {s:['Semana 5–6','Weeks 5–6'],t:['Formalizar y abrir cuenta','Formalize and open an account'],d:['Revisar con la Cámara de Comercio y la DIAN la figura de la asociación para vender, facturar y pagar a los socios.','Check with the Chamber of Commerce and DIAN how the association can sell, invoice and pay members.']},
+  {s:['Semana 7–8','Weeks 7–8'],t:['Buscar apoyo','Seek support'],d:['Tocar puertas en la Alcaldía, la Gobernación, la ADR y el SENA para local, báscula, nevera y capacitación.','Knock on doors at the Mayor\'s Office, the Governor\'s Office, ADR and SENA for space, scale, fridge and training.']},
+  {s:['Semana 9–10','Weeks 9–10'],t:['Clientes fijos','Steady customers'],d:['Cerrar los primeros 5 restaurantes o tiendas y las primeras 30 canastas familiares.','Close the first 5 restaurants or stores and the first 30 family baskets.']},
+  {s:['Semana 11','Week 11'],t:['Prueba piloto','Pilot run'],d:['Un sábado de retiro con pocas parcelas para ajustar empaque, tiempos y pagos.','One pick-up Saturday with a few farms to fine-tune packing, timing and payments.']},
+  {s:['Semana 12','Week 12'],t:['Apertura','Opening'],d:['Inauguración con recorrido por las parcelas y lanzamiento de la app en redes.','Opening day with a farm tour and the app launch on social media.']}
+];
+let hechos={};
+try{ hechos = JSON.parse(localStorage.getItem('tp-ruta')||'{}'); }catch(e){ hechos={}; }
+function ruta(){
+  const i=EN?1:0;
+  document.getElementById("listaRuta").innerHTML = RUTA.map((h,k)=>`
+    <label class="hito ${hechos[k]?'hecho':''}">
+      <input type="checkbox" ${hechos[k]?'checked':''} onchange="marcar(${k},this.checked)">
+      <div><div class="cuando">${h.s[i]}</div><h3>${h.t[i]}</h3><p>${h.d[i]}</p></div>
+    </label>`).join('');
+  const n = Object.values(hechos).filter(Boolean).length;
+  document.getElementById('prog').style.width = (n/RUTA.length*100)+'%';
+}
+function marcar(k,v){ hechos[k]=v; try{localStorage.setItem('tp-ruta',JSON.stringify(hechos))}catch(e){} ruta(); }
+
+/* ---------- límites ---------- */
+const LIMS = [
+  {t:['La coordinación es lo más duro','Coordination is the hardest part'],d:['Con muchos proveedores, los pedidos se enredan. Por eso la app: un solo pedido, separado por parcela y liquidado solo.','With many suppliers, orders get tangled. That\'s why the app: one order, split by farm and settled automatically.']},
+  {t:['Arranque lento','Slow start'],d:['Navore tenía menos de 30 clientes en sus primeros meses. Conviene empezar con clientes fijos (restaurantes y canastas) antes de abrir el local.','Navore had fewer than 30 customers in its first months. Better to start with steady customers (restaurants and baskets) before opening the store.']},
+  {t:['Lo que no se vende','What doesn\'t sell'],d:['Lo perecedero se pierde. Pedido previo, cosecha por demanda y un destino acordado para la segunda calidad (bollos, dulces, pulpas).','Perishables spoil. Pre-orders, harvest on demand and an agreed outlet for second grade (bollos, sweets, pulps).']},
+  {t:['Peleas por la plata','Fights over money'],d:['Sin regla escrita se rompe el gremio. Reparto firmado, cuentas abiertas en la app y pago puntual cada viernes.','Without a written rule the group breaks up. Signed sharing, open books in the app and on-time pay every Friday.']},
+  {t:['Depender de un fondo','Depending on a grant'],d:['Varios casos arrancaron con plata pública. Sirve para empezar, pero la tienda debe sostenerse con su propio 20 %.','Several cases started with public money. Good for starting, but the shop must sustain itself with its own share.']},
+  {t:['Cifras por confirmar','Figures to confirm'],d:['Algunos datos del mundo vienen de empresas que venden el software o de reportes viejos (Melo es de 2020). Úselos como guía, no como promesa.','Some world figures come from companies selling the software or old reports (Melo is from 2020). Use them as a guide, not a promise.']}
+];
+function limites(){
+  const i=EN?1:0;
+  document.getElementById('lims').innerHTML = LIMS.map(l=>`<div class="lim rev vis"><h3>${l.t[i]}</h3><p>${l.d[i]}</p></div>`).join('');
+}
+
+/* ---------- animaciones ---------- */
+function horaCol(){ return new Date().toLocaleString(EN?'en-US':'es-CO',{timeZone:'America/Bogota',dateStyle:'medium',timeStyle:'short'}); }
+const io = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return;
+  e.target.classList.add('vis');
+  e.target.querySelectorAll('[data-cuenta]').forEach(contar);
+  io.unobserve(e.target);
+}),{threshold:.15});
+function contar(el){
+  if(el.dataset.ok) return; el.dataset.ok=1;
+  const fin=+el.dataset.cuenta, suf=el.dataset.suf||'', t0=performance.now();
+  (function f(t){ const p=Math.min(1,(t-t0)/1400), v=Math.round(fin*(1-Math.pow(1-p,3)));
+    el.textContent=v.toLocaleString('es-CO')+suf; if(p<1) requestAnimationFrame(f); })(t0);
+}
+document.querySelectorAll('.rev').forEach(e=>io.observe(e));
+const secs=[...document.querySelectorAll('section[id]')];
+addEventListener('scroll',()=>{
+  let act=''; secs.forEach(s=>{ if(scrollY+120>=s.offsetTop) act=s.id; });
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+act));
+},{passive:true});
+setInterval(()=>{ document.getElementById('hora').textContent = T('Hora de Colombia: ','Colombia time: ')+horaCol(); },1000);
+
+pintarIdioma();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
